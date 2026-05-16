@@ -1,4 +1,4 @@
-"""`metabotik eval` — compute deterministic metrics over an existing run."""
+"""`metabotik eval` — write run summary + by_task.jsonl (optional manual rubric CSV)."""
 
 from __future__ import annotations
 

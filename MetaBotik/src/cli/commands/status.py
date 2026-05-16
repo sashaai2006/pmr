@@ -27,13 +27,21 @@ def status_cmd() -> None:
                 continue
             latest = runs[-1]
             summary_path = mode_dir / latest / "summary.json"
+            quality_path = mode_dir / latest / "quality_judge_summary.json"
             tail = ""
-            if summary_path.exists():
+            if quality_path.exists():
+                try:
+                    payload = read_json(quality_path)
+                    n = payload.get("n_tasks")
+                    ai = payload.get("ai_score_mean")
+                    tail = f"  n={n} ai_score_mean={ai}"
+                except Exception:  # noqa: BLE001
+                    tail = "  (quality_judge_summary unreadable)"
+            elif summary_path.exists():
                 try:
                     payload = read_json(summary_path)
                     n = payload.get("n_tasks")
-                    rigor = payload.get("procedural_rigor_mean")
-                    tail = f"  n={n} rigor={rigor}"
+                    tail = f"  n={n}"
                 except Exception:  # noqa: BLE001
                     tail = "  (summary unreadable)"
             typer.echo(f"  {mode_dir.name}: latest={latest} runs={len(runs)}{tail}")

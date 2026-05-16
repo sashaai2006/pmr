@@ -1,13 +1,14 @@
-"""Compute deterministic metrics over a run directory and persist them.
+"""Compute lightweight eval artifacts over a run directory and persist them.
 
-Reads `<run_dir>/*.json` answers, optionally a rubric CSV, and writes:
+Reads `<run_dir>/PMR-*.json` answers, optionally a rubric CSV, and writes:
 
-- `<run_dir>/by_task.jsonl` — one row per task with procedural rigor (and rubric if present).
-- `<run_dir>/summary.json` — aggregate per-metric stats over the run.
+- `<run_dir>/by_task.jsonl` — one row per task (manual rubric columns if present).
+- `<run_dir>/summary.json` — aggregate stats (task count + rubric aggregates if present).
 """
 
 from __future__ import annotations
 
+import json
 import logging
 import statistics
 from pathlib import Path
@@ -18,10 +19,6 @@ from src.domain.schemas import (
     EvalReport,
     RubricAxes,
 )
-from src.evaluation.procedural_metrics import (
-    RESULT_ARTIFACT_JSON,
-    evaluate_procedural_one,
-)
 from src.evaluation.rubric_scorer import RubricEntry
 from src.infrastructure.repo import read_json, write_json
 
@@ -29,12 +26,26 @@ log = logging.getLogger("metabotik.eval")
 
 PASS_THRESHOLD_DEFAULT = 7
 
+# JSON filenames in run_dir that must never be treated as task answers.
+EVAL_SKIP_JSON_NAMES: frozenset[str] = frozenset(
+    {
+        "summary.json",
+        "run_summary.json",
+        "procedural_summary.json",
+        "coverage_summary.json",
+        "rubric_summary.json",
+        "metrics_summary.json",
+        "slice_breakdown.json",
+        "quality_judge_summary.json",
+    }
+)
+
 
 def _discover_answer_paths(run_dir: Path) -> list[Path]:
     return sorted(
         path
         for path in run_dir.glob("*.json")
-        if path.name not in RESULT_ARTIFACT_JSON and path.name != "run_summary.json"
+        if path.name not in EVAL_SKIP_JSON_NAMES
     )
 
 
@@ -57,9 +68,6 @@ class EvalUseCase:
         self._pass_threshold = pass_threshold
 
     def _score_one(self, payload: dict[str, Any], task_id: str) -> CaseScore:
-        proc_metrics = evaluate_procedural_one(task_id, self._run_dir / f"{task_id}.json")
-        proc_score = proc_metrics.procedural_rigor_score
-
         rubric_entry = self._rubric_by_id.get(task_id)
         rubric: RubricAxes | None = None
         rubric_total: int | None = None
@@ -71,7 +79,6 @@ class EvalUseCase:
 
         return CaseScore(
             task_id=task_id,
-            procedural_rigor_score=proc_score,
             rubric=rubric,
             rubric_total=rubric_total,
             pass_threshold=self._pass_threshold,
@@ -112,7 +119,6 @@ class EvalUseCase:
         if n == 0:
             return {"n_tasks": 0}
 
-        proc = [s.procedural_rigor_score for s in scores if s.procedural_rigor_score is not None]
         rubric_totals = [s.rubric_total for s in scores if s.rubric_total is not None]
         pass_flags = [s.pass_binary for s in scores if s.pass_binary is not None]
 
@@ -121,8 +127,6 @@ class EvalUseCase:
             "suite": self._suite,
             "mode": self._mode,
             "run_id": self._run_id,
-            "procedural_rigor_mean": round(statistics.mean(proc), 4) if proc else 0.0,
-            "procedural_rigor_std": round(statistics.stdev(proc), 4) if len(proc) > 1 else 0.0,
         }
         if rubric_totals:
             summary["rubric_score_mean"] = round(statistics.mean(rubric_totals), 4)
@@ -135,10 +139,7 @@ class EvalUseCase:
         write_json(self._run_dir / "summary.json", report.summary)
         rows: list[dict[str, Any]] = []
         for score in report.by_task:
-            row: dict[str, Any] = {
-                "task_id": score.task_id,
-                "procedural_rigor_score": score.procedural_rigor_score,
-            }
+            row: dict[str, Any] = {"task_id": score.task_id}
             if score.rubric is not None:
                 row["rubric"] = score.rubric.model_dump()
                 row["rubric_total"] = score.rubric_total
@@ -146,13 +147,10 @@ class EvalUseCase:
             if score.notes:
                 row["notes"] = score.notes
             rows.append(row)
-        # Write JSONL by hand to keep one row per line, with stable ordering.
         out_path = self._run_dir / "by_task.jsonl"
         out_path.parent.mkdir(parents=True, exist_ok=True)
-        import json as _json
-
         with out_path.open("w", encoding="utf-8") as handle:
             for row in rows:
-                handle.write(_json.dumps(row, ensure_ascii=False))
+                handle.write(json.dumps(row, ensure_ascii=False))
                 handle.write("\n")
         log.info("eval persisted summary + by_task -> %s", self._run_dir)

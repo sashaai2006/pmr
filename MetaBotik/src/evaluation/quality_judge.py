@@ -1,8 +1,7 @@
 """LLM-backed semantic quality judge for PMR-Bench answers.
 
-This judge is intentionally separate from deterministic `eval`: procedural rigor
-remains a technical/form metric, while this module scores answer quality by
-semantic criteria.
+Separate from lightweight `eval` (task bookkeeping / optional manual rubric): this
+module scores answer quality by semantic criteria.
 """
 
 from __future__ import annotations

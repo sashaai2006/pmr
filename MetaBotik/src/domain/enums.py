@@ -32,9 +32,8 @@ class SuiteName(StrEnum):
 
 
 class MetricKind(StrEnum):
-    """Names of the deterministic per-case metric blocks emitted by the eval layer."""
+    """Names of optional per-case metric blocks emitted by the eval layer (e.g. manual CSV)."""
 
-    PROCEDURAL_RIGOR = "procedural_rigor"
     RUBRIC = "rubric_score"
 
 

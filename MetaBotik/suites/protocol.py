@@ -33,4 +33,4 @@ class SuiteProtocol(Protocol):
         """Return the rubric definition shared across all tasks in the suite."""
 
     def supported_metrics(self) -> tuple[str, ...]:
-        """Names of `MetricKind` values this suite produces by default."""
+        """Stable metric identifiers this suite may surface via `eval` (e.g. optional manual rubric)."""

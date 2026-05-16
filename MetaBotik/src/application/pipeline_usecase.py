@@ -12,6 +12,7 @@ from src.domain.enums import PromptMode
 from src.evaluation.compare import compare_summaries, load_summary, save_comparison
 from src.evaluation.paired_stats import paired_stats, save_paired_stats
 from src.evaluation.quality_judge import (
+    BY_TASK_FILENAME as QUALITY_JUDGE_BY_TASK_FILENAME,
     SUMMARY_FILENAME as QUALITY_JUDGE_SUMMARY_FILENAME,
     QualityJudgeUseCase,
 )
@@ -130,9 +131,18 @@ class PipelineUseCase:
             base = base_runs[-1]
             log.info("compare %s vs %s (run_ids=%s/%s)", cand_mode.value, base_mode.value, cand.run_id, base.run_id)
 
+            cand_eval = cand.run_dir / "summary.json"
+            base_eval = base.run_dir / "summary.json"
+            cand_quality = cand.run_dir / QUALITY_JUDGE_SUMMARY_FILENAME
+            base_quality = base.run_dir / QUALITY_JUDGE_SUMMARY_FILENAME
+            if cand_quality.exists() and base_quality.exists():
+                cand_summary_path, base_summary_path = cand_quality, base_quality
+            else:
+                cand_summary_path, base_summary_path = cand_eval, base_eval
+
             comparison = compare_summaries(
-                candidate=load_summary(cand.run_dir / "summary.json"),
-                baseline=load_summary(base.run_dir / "summary.json"),
+                candidate=load_summary(cand_summary_path),
+                baseline=load_summary(base_summary_path),
                 candidate_label=cand_mode.value,
                 baseline_label=base_mode.value,
             )
@@ -140,10 +150,17 @@ class PipelineUseCase:
             save_comparison(comparison, cmp_path)
             outcome.comparison_paths.append(cmp_path)
 
+            cand_bt = cand.run_dir / QUALITY_JUDGE_BY_TASK_FILENAME
+            base_bt = base.run_dir / QUALITY_JUDGE_BY_TASK_FILENAME
+            if cand_bt.exists() and base_bt.exists():
+                paired_cand, paired_base = cand_bt, base_bt
+            else:
+                paired_cand, paired_base = cand.run_dir / "by_task.jsonl", base.run_dir / "by_task.jsonl"
+
             try:
                 stats = paired_stats(
-                    candidate_path=cand.run_dir / "by_task.jsonl",
-                    baseline_path=base.run_dir / "by_task.jsonl",
+                    candidate_path=paired_cand,
+                    baseline_path=paired_base,
                     candidate_label=cand_mode.value,
                     baseline_label=base_mode.value,
                 )

@@ -37,8 +37,8 @@ if [[ -n "$LABEL" ]]; then
   cp "$MB/results/pmr-bench/baseline/latest/quality_judge_summary.json" "$OUT/baseline_quality_summary.json"
   cp "$MB/results/pmr-bench/pmr/latest/quality_judge_by_task.jsonl" "$OUT/pmr_quality_by_task.jsonl"
   cp "$MB/results/pmr-bench/baseline/latest/quality_judge_by_task.jsonl" "$OUT/baseline_quality_by_task.jsonl"
-  cp "$MB/results/pmr-bench/pmr/latest/by_task.jsonl" "$OUT/pmr_procedural_by_task.jsonl"
-  cp "$MB/results/pmr-bench/baseline/latest/by_task.jsonl" "$OUT/baseline_procedural_by_task.jsonl"
+  cp "$MB/results/pmr-bench/pmr/latest/by_task.jsonl" "$OUT/pmr_by_task.jsonl"
+  cp "$MB/results/pmr-bench/baseline/latest/by_task.jsonl" "$OUT/baseline_by_task.jsonl"
   cp "$MB/results/pmr-bench/_comparison/compare_pmr_vs_baseline.json" "$OUT/compare_pmr_vs_baseline.json"
   cp "$MB/results/pmr-bench/_comparison/paired_pmr_vs_baseline.json" "$OUT/paired_pmr_vs_baseline.json" 2>/dev/null || true
   echo "=== done bundle $OUT ==="

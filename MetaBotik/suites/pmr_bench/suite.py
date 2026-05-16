@@ -84,7 +84,4 @@ class PmrBenchSuite:
         return payload
 
     def supported_metrics(self) -> tuple[str, ...]:
-        return (
-            MetricKind.PROCEDURAL_RIGOR.value,
-            MetricKind.RUBRIC.value,
-        )
+        return (MetricKind.RUBRIC.value,)

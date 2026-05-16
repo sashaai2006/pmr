@@ -11,26 +11,25 @@
 ## Основные результаты
 
 | Метрика | PMR | Baseline | Δ |
-|---|---|---|---|
-| procedural_rigor_mean | 0.8616 | 0.0757 | 0.7859 |
-| completeness_mean | 6.7 | 4.9 | 1.8 |
-| accuracy_mean | 7.75 | 5.5 | 2.25 |
-| latent_pattern_quality_mean | 5.9 | 3.3 | 2.6 |
-| practical_value_mean | 8.2 | 5.4 | 2.8 |
-| ai_score_mean | 7.23 | 4.885 | 2.345 |
-| pass_rate | 0.6 | 0.0 | 0.6 |
+|---|---:|---:|---:|
+| `accuracy_mean` | 7.75 | 5.5 | 2.25 |
+| `ai_score_mean` | 7.23 | 4.885 | 2.345 |
+| `completeness_mean` | 6.7 | 4.9 | 1.8 |
+| `latent_pattern_quality_mean` | 5.9 | 3.3 | 2.6 |
+| `pass_rate` | 0.6 | 0.0 | 0.6 |
+| `practical_value_mean` | 8.2 | 5.4 | 2.8 |
 
 ## Результаты по уровню сложности
 
-| Уровень сложности | n | PMR AI Score | Baseline AI Score | Δ | PMR Latent Patterns | Baseline Latent Patterns | Δ |
-|---|---|---|---|---|---|---|---|
+| Уровень сложности | n | PMR `AI Score` | Baseline `AI Score` | Δ | PMR `Latent Patterns` | Baseline `Latent Patterns` | Δ |
+|---|---:|---:|---:|---:|---:|---:|---:|
 | Advanced | 5 | 7.07 | 4.56 | 2.51 | 5.8 | 3.0 | 2.8 |
 | Intermediate | 5 | 7.39 | 5.21 | 2.18 | 6.0 | 3.6 | 2.4 |
 
 ## Результаты по доменам
 
-| Домен | n | PMR AI Score | Baseline AI Score | Δ | PMR Latent Patterns | Baseline Latent Patterns | Δ |
-|---|---|---|---|---|---|---|---|
+| Домен | n | PMR `AI Score` | Baseline `AI Score` | Δ | PMR `Latent Patterns` | Baseline `Latent Patterns` | Δ |
+|---|---:|---:|---:|---:|---:|---:|---:|
 | Education | 2 | 6.975 | 5.225 | 1.75 | 5.5 | 4.0 | 1.5 |
 | Engineering | 3 | 7.2333 | 4.3667 | 2.8667 | 5.6667 | 2.6667 | 3.0 |
 | Management | 3 | 7.4833 | 4.7833 | 2.7 | 6.3333 | 3.0 | 3.3333 |
@@ -38,4 +37,17 @@
 
 ## Интерпретация
 
-`procedural_rigor_score` — детерминированная метрика формы; quality judge — LLM-оценка по осям и `AI Score` по формуле в коде. В этом прогоне судья совпадает с answer-моделью (DeepSeek).
+Quality judge — LLM-оценка по осям и `AI Score` по формуле в коде. В этом прогоне судья совпадает с answer-моделью (DeepSeek).
+
+## Включённые артефакты
+
+- `baseline_by_task.jsonl`
+- `baseline_quality_by_task.jsonl`
+- `baseline_quality_summary.json`
+- `baseline_summary.json`
+- `compare_pmr_vs_baseline.json`
+- `paired_pmr_vs_baseline.json`
+- `pmr_by_task.jsonl`
+- `pmr_quality_by_task.jsonl`
+- `pmr_quality_summary.json`
+- `pmr_summary.json`

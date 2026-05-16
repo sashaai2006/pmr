@@ -9,13 +9,13 @@ from src.evaluation.compare import compare_summaries, load_summary, save_compari
 
 
 def test_compare_returns_deltas_for_numeric_keys() -> None:
-    cand = {"procedural_rigor_mean": 0.88, "rubric_score_mean": 0.92, "n_tasks": 10}
-    base = {"procedural_rigor_mean": 0.01, "rubric_score_mean": 0.10, "n_tasks": 10}
+    cand = {"latency_mean_ms": 120.0, "rubric_score_mean": 0.92, "n_tasks": 10}
+    base = {"latency_mean_ms": 200.0, "rubric_score_mean": 0.10, "n_tasks": 10}
     result = compare_summaries(candidate=cand, baseline=base, candidate_label="pmr", baseline_label="bl")
     metrics = {row["metric"]: row for row in result["metrics"]}
     assert "n_tasks" not in metrics  # excluded
-    assert metrics["procedural_rigor_mean"]["delta"] > 0
-    assert metrics["procedural_rigor_mean"]["winner"] == "pmr"
+    assert metrics["latency_mean_ms"]["delta"] < 0
+    assert metrics["latency_mean_ms"]["winner"] == "bl"
     assert metrics["rubric_score_mean"]["winner"] == "pmr"
 
 

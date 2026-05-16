@@ -4,20 +4,56 @@
   "baseline_label": "baseline",
   "metrics": [
     {
-      "metric": "procedural_rigor_mean",
-      "pmr_value": 0.6951,
-      "baseline_value": 0.012,
-      "delta": 0.6831,
-      "relative_change_percent": 5692.5,
+      "metric": "accuracy_mean",
+      "pmr_value": 5.35,
+      "baseline_value": 4.9,
+      "delta": 0.45,
+      "relative_change_percent": 9.1837,
       "winner": "pmr",
       "change_label": "improved"
     },
     {
-      "metric": "procedural_rigor_std",
-      "pmr_value": 0.0736,
-      "baseline_value": 0.0193,
-      "delta": 0.0543,
-      "relative_change_percent": 281.3472,
+      "metric": "ai_score_mean",
+      "pmr_value": 4.585,
+      "baseline_value": 4.29,
+      "delta": 0.295,
+      "relative_change_percent": 6.8765,
+      "winner": "pmr",
+      "change_label": "improved"
+    },
+    {
+      "metric": "completeness_mean",
+      "pmr_value": 4.4,
+      "baseline_value": 4.1,
+      "delta": 0.3,
+      "relative_change_percent": 7.3171,
+      "winner": "pmr",
+      "change_label": "improved"
+    },
+    {
+      "metric": "latent_pattern_quality_mean",
+      "pmr_value": 3.4,
+      "baseline_value": 3.1,
+      "delta": 0.3,
+      "relative_change_percent": 9.6774,
+      "winner": "pmr",
+      "change_label": "improved"
+    },
+    {
+      "metric": "pass_rate",
+      "pmr_value": 0.0,
+      "baseline_value": 0.0,
+      "delta": 0.0,
+      "relative_change_percent": null,
+      "winner": "tie",
+      "change_label": "no_change"
+    },
+    {
+      "metric": "practical_value_mean",
+      "pmr_value": 4.8,
+      "baseline_value": 4.7,
+      "delta": 0.1,
+      "relative_change_percent": 2.1277,
       "winner": "pmr",
       "change_label": "improved"
     }

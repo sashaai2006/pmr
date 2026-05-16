@@ -1,8 +1,8 @@
 """Deterministic element-coverage metric for PMR-Bench answers.
 
 Coverage is a suite-level check: did the answer cover the specific expected
-procedural claims in the gold file? It is intentionally separate from
-``procedural_rigor`` (which only checks that the PMR form is explicit).
+procedural claims in the gold file? It is intentionally separate from schema
+checks on the PMR JSON shape.
 
 The first implementation used plain token overlap. That was useful as a smoke
 test, but it punished correct paraphrases. The matcher below still avoids an

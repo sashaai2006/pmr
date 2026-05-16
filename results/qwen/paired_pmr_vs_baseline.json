@@ -4,44 +4,116 @@
   "alpha": 0.05,
   "candidate_label": "pmr",
   "baseline_label": "baseline",
-  "candidate_path": "results/pmr-bench/pmr/latest/by_task.jsonl",
-  "baseline_path": "results/pmr-bench/baseline/latest/by_task.jsonl",
+  "candidate_path": "/Users/sasii/pmr/results/qwen/pmr_quality_by_task.jsonl",
+  "baseline_path": "/Users/sasii/pmr/results/qwen/baseline_quality_by_task.jsonl",
   "overall": {
-    "metric": "procedural_rigor_score",
-    "pmr_mean": 0.8825,
-    "baseline_mean": 0.0833,
-    "delta_mean": 0.7993,
-    "relative_change_percent": 960.06,
-    "paired_t_statistic": 38.3269,
-    "paired_p_value": 0.0,
-    "cohen_d_paired": 12.12,
+    "metric": "ai_score",
+    "pmr_mean": 8.3275,
+    "baseline_mean": 6.865,
+    "delta_mean": 1.4625,
+    "relative_change_percent": 21.3,
+    "paired_t_statistic": 3.6798,
+    "paired_p_value": 0.005077,
+    "cohen_d_paired": 1.1636,
     "ci_95": [
-      0.7587,
-      0.8355
+      0.775,
+      2.2275
     ],
     "significant_at_alpha": true,
-    "wins_pmr": 10,
+    "wins_pmr": 9,
     "wins_baseline": 0,
-    "ties": 0
+    "ties": 1
   },
   "metrics": [
     {
-      "metric": "procedural_rigor_score",
-      "pmr_mean": 0.8825,
-      "baseline_mean": 0.0833,
-      "delta_mean": 0.7993,
-      "relative_change_percent": 960.06,
-      "paired_t_statistic": 38.3269,
-      "paired_p_value": 0.0,
-      "cohen_d_paired": 12.12,
+      "metric": "accuracy",
+      "pmr_mean": 8.8,
+      "baseline_mean": 7.4,
+      "delta_mean": 1.4,
+      "relative_change_percent": 18.92,
+      "paired_t_statistic": 3.1392,
+      "paired_p_value": 0.011943,
+      "cohen_d_paired": 0.9927,
       "ci_95": [
-        0.7587,
-        0.8355
+        0.65,
+        2.3
       ],
       "significant_at_alpha": true,
-      "wins_pmr": 10,
+      "wins_pmr": 7,
       "wins_baseline": 0,
-      "ties": 0
+      "ties": 3
+    },
+    {
+      "metric": "ai_score",
+      "pmr_mean": 8.3275,
+      "baseline_mean": 6.865,
+      "delta_mean": 1.4625,
+      "relative_change_percent": 21.3,
+      "paired_t_statistic": 3.6798,
+      "paired_p_value": 0.005077,
+      "cohen_d_paired": 1.1636,
+      "ci_95": [
+        0.775,
+        2.2275
+      ],
+      "significant_at_alpha": true,
+      "wins_pmr": 9,
+      "wins_baseline": 0,
+      "ties": 1
+    },
+    {
+      "metric": "completeness",
+      "pmr_mean": 7.8,
+      "baseline_mean": 6.5,
+      "delta_mean": 1.3,
+      "relative_change_percent": 20.0,
+      "paired_t_statistic": 3.0736,
+      "paired_p_value": 0.013276,
+      "cohen_d_paired": 0.972,
+      "ci_95": [
+        0.6,
+        2.1
+      ],
+      "significant_at_alpha": true,
+      "wins_pmr": 6,
+      "wins_baseline": 0,
+      "ties": 4
+    },
+    {
+      "metric": "latent_pattern_quality",
+      "pmr_mean": 7.75,
+      "baseline_mean": 5.6,
+      "delta_mean": 2.15,
+      "relative_change_percent": 38.39,
+      "paired_t_statistic": 4.0773,
+      "paired_p_value": 0.002769,
+      "cohen_d_paired": 1.2894,
+      "ci_95": [
+        1.2,
+        3.1
+      ],
+      "significant_at_alpha": true,
+      "wins_pmr": 7,
+      "wins_baseline": 0,
+      "ties": 3
+    },
+    {
+      "metric": "practical_value",
+      "pmr_mean": 8.75,
+      "baseline_mean": 7.6,
+      "delta_mean": 1.15,
+      "relative_change_percent": 15.13,
+      "paired_t_statistic": 3.4457,
+      "paired_p_value": 0.007324,
+      "cohen_d_paired": 1.0896,
+      "ci_95": [
+        0.6,
+        1.8
+      ],
+      "significant_at_alpha": true,
+      "wins_pmr": 7,
+      "wins_baseline": 0,
+      "ties": 3
     }
   ]
 }

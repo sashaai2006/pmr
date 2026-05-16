@@ -310,12 +310,11 @@ class RubricAxes(BaseModel):
 
 
 class CaseScore(BaseModel):
-    """Per-case score block: combines all deterministic + manual metrics."""
+    """Per-case score block: optional manual rubric (CSV) keyed by task_id."""
 
     model_config = ConfigDict(extra="forbid")
 
     task_id: str
-    procedural_rigor_score: float | None = None
     rubric: RubricAxes | None = None
     rubric_total: int | None = None
     pass_threshold: int = 7

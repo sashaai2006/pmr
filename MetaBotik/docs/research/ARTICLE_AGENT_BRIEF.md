@@ -38,7 +38,7 @@ prompts/baseline_promt.txt                    # structured baseline prompt
 datasets/processed/dataset.jsonl              # evaluated task set
 datasets/processed/zarn_gold.jsonl            # gold labels for outcome metrics
 src/evaluation/zarn_metrics.py                # outcome metrics
-src/evaluation/procedural_metrics.py          # procedural rigor metrics
+src/evaluation/quality_judge.py               # PMR-Bench LLM semantic quality judge
 src/evaluation/paired_stats.py                # paired t-test, Cohen's d, bootstrap CI
 scripts/run_pipeline_repeated_aggregate.py    # repeated experiment runner
 results_pipeline_mc/                          # final 3-run results
@@ -100,45 +100,13 @@ Key metrics:
 - `handoff_completeness`: quality of handoff context.
 - `calendar_uncertainty_compliance`: handling of uncertain scheduling.
 
-### 4.2. Procedural Rigor Metrics
+### 4.2. PMR-Bench semantic quality (current)
 
-Implemented in `src/evaluation/procedural_metrics.py`.
-
-These measure how explicitly the saved JSON answer exposes the procedure. They do **not** use gold labels and do **not** measure whether the workflow solution is correct.
-
-The composite metric is:
-
-```text
-procedural_rigor_score =
-  0.15 * procedure_classification
-+ 0.15 * procedure_justification
-+ 0.15 * alternative_procedures
-+ 0.20 * critical_points_density
-+ 0.20 * adaptation_specificity
-+ 0.15 * reflection_actionability
-```
-
-`procedural_trace_present` is reported separately and is not included in the composite.
-
-Submetric meanings:
-
-| Metric | Meaning |
-|--------|---------|
-| `procedural_trace_present` | Whether the answer contains `procedural_analysis`, non-empty `solution_steps`, and `reflection`. |
-| `procedure_classification` | Whether the task/procedure type and selected procedure are explicitly named. |
-| `procedure_justification` | Whether the selected procedure is justified with causal reasoning. |
-| `alternative_procedures` | Whether rejected alternatives are listed with reasons. |
-| `critical_points_density` | Whether steps identify critical points, risks, or failure/adaptation points. |
-| `adaptation_specificity` | Whether adaptation notes are concrete and structured. |
-| `reflection_actionability` | Whether reflection includes actionable future modifications. |
-
-Interpretation:
-
-- PMR is expected to score high because the PMR protocol explicitly requires these fields.
-- Baseline can still solve tasks well, but usually does not expose the procedure in the PMR schema.
-- Therefore procedural rigor measures **procedural transparency**, not generic intelligence.
-
-This distinction should be stated clearly to avoid overstating the claim.
+For **PMR-Bench**, MetaBotik uses `src/evaluation/quality_judge.py`: LLM-scored axes
+`completeness`, `accuracy`, `latent_pattern_quality`, `practical_value`, plus a
+code-computed `ai_score` (see module for weights). The historical Zarn-era
+deterministic legacy form-density stack (removed from codebase)
+from the codebase.
 
 ---
 
@@ -173,36 +141,12 @@ Important nuance:
 - The outcome claim should be phrased as a moderate average improvement, not as a universally statistically decisive improvement.
 - Stronger outcome effects appear in specific submetrics such as `blocker_visibility` and `handoff_completeness`.
 
-### 5.2. Procedural Rigor Results
+### 5.2. Historical procedural rigor (Zarn, archived)
 
-Mean across 3 runs:
-
-| Metric | PMR | Baseline | Difference |
-|--------|-----|----------|------------|
-| `procedural_rigor_score` | **0.886 ± 0.012** | **0.009 ± 0.005** | **+0.877 points** |
-| `procedural_trace_present` | **1.000** | **0.000** | +1.000 |
-| `procedure_classification` | **1.000** | **0.000** | +1.000 |
-| `alternative_procedures` | **1.000** | **0.000** | +1.000 |
-| `critical_points_density` | **0.989 ± 0.019** | **0.047 ± 0.023** | +0.942 |
-| `adaptation_specificity` | **0.957 ± 0.032** | **0.000** | +0.957 |
-| `reflection_actionability` | **0.807 ± 0.051** | **0.000** | +0.807 |
-
-Per-run `procedural_rigor_score`:
-
-| Run | PMR | Baseline | task_count |
-|-----|-----|----------|------------|
-| run_01 | 0.873 | 0.004 | 10 |
-| run_02 | 0.897 | 0.012 | 10 |
-| run_03 | 0.889 | 0.012 | 10 |
-| **Mean** | **0.886** | **0.009** | 10 |
-
-Statistical interpretation:
-
-- PMR beats baseline on procedural rigor on all 10 tasks in each run.
-- Paired procedural comparisons are significant in all runs (`p < 0.001`).
-- Effect sizes are very large.
-- Avoid using relative percent improvements for procedural rigor because baseline is near zero and percentages become misleadingly huge.
-- Use absolute delta: **+0.877**.
+The legacy Zarn table of form-density composite means (PMR **0.886 ± 0.012** vs baseline **0.009 ± 0.005**)
+refers to the **legacy Zarn pipeline** and the removed deterministic scorer. Do not
+present those numbers as current PMR-Bench methodology; cite them only as historical
+context or reproduce them from git history if needed.
 
 ---
 
@@ -214,7 +158,7 @@ Recommended framing:
 
 More precise:
 
-> On 10 expert workflow automation tasks across 3 runs, PMR improved the mean Zarn outcome score from 0.787 to 0.846 (+7.7% relative). The stronger and more distinctive effect was procedural: PMR achieved a procedural rigor score of 0.886 versus 0.009 for the structured baseline, indicating systematic exposure of procedure classification, justification, alternatives, critical points, adaptation notes, and reflection.
+> On 10 expert workflow automation tasks across 3 runs, PMR improved the mean Zarn outcome score from 0.787 to 0.846 (+7.7% relative). Separately, the legacy deterministic procedural transparency stack (now removed) reported a very large PMR vs baseline gap; for PMR-Bench, use quality-judge outputs instead.
 
 The paper should not claim:
 
@@ -248,7 +192,7 @@ Mention:
 - PMR makes procedure selection, step logic, critical points, and reflection explicit.
 - Experiment: 10 expert workflow automation tasks, 3 repeated runs, PMR vs structured baseline.
 - Outcome: PMR improves `overall_score` from 0.787 to 0.846 (+7.7%).
-- Procedural: PMR improves `procedural_rigor_score` from 0.009 to 0.886.
+- Semantic (PMR-Bench): compare `ai_score` / axis means from `quality_judge_summary.json`.
 - Conclusion: PMR is most valuable as an explainability/reproducibility layer, not only as a raw outcome optimizer.
 
 ### Sections

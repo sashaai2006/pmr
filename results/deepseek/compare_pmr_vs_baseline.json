@@ -4,22 +4,58 @@
   "baseline_label": "baseline",
   "metrics": [
     {
-      "metric": "procedural_rigor_mean",
-      "pmr_value": 0.8616,
-      "baseline_value": 0.0757,
-      "delta": 0.7859,
-      "relative_change_percent": 1038.177,
+      "metric": "accuracy_mean",
+      "pmr_value": 7.75,
+      "baseline_value": 5.5,
+      "delta": 2.25,
+      "relative_change_percent": 40.9091,
       "winner": "pmr",
       "change_label": "improved"
     },
     {
-      "metric": "procedural_rigor_std",
-      "pmr_value": 0.028,
-      "baseline_value": 0.0759,
-      "delta": -0.0479,
-      "relative_change_percent": -63.1094,
-      "winner": "baseline",
-      "change_label": "regressed"
+      "metric": "ai_score_mean",
+      "pmr_value": 7.23,
+      "baseline_value": 4.885,
+      "delta": 2.345,
+      "relative_change_percent": 48.0041,
+      "winner": "pmr",
+      "change_label": "improved"
+    },
+    {
+      "metric": "completeness_mean",
+      "pmr_value": 6.7,
+      "baseline_value": 4.9,
+      "delta": 1.8,
+      "relative_change_percent": 36.7347,
+      "winner": "pmr",
+      "change_label": "improved"
+    },
+    {
+      "metric": "latent_pattern_quality_mean",
+      "pmr_value": 5.9,
+      "baseline_value": 3.3,
+      "delta": 2.6,
+      "relative_change_percent": 78.7879,
+      "winner": "pmr",
+      "change_label": "improved"
+    },
+    {
+      "metric": "pass_rate",
+      "pmr_value": 0.6,
+      "baseline_value": 0.0,
+      "delta": 0.6,
+      "relative_change_percent": null,
+      "winner": "pmr",
+      "change_label": "improved"
+    },
+    {
+      "metric": "practical_value_mean",
+      "pmr_value": 8.2,
+      "baseline_value": 5.4,
+      "delta": 2.8,
+      "relative_change_percent": 51.8519,
+      "winner": "pmr",
+      "change_label": "improved"
     }
   ]
 }

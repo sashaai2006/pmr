@@ -1,6 +1,7 @@
-"""Paired statistics between two `metrics_by_task.jsonl` (or `procedural_by_task.jsonl`) files.
+"""Paired statistics between two per-task JSONL files (e.g. quality_judge_by_task.jsonl).
 
-Provides paired t-test, Cohen's d, and bootstrap 95% CI for mean delta.
+Scalar fields and nested ``{"score": float}`` axis objects (quality judge) are flattened
+for pairing. Provides paired t-test, Cohen's d, and bootstrap 95% CI for mean delta.
 
 No scipy dependency: t-CDF computed via the regularized incomplete beta function
 implemented from `math` only (good enough for n>=2 paired samples).
@@ -15,9 +16,20 @@ from pathlib import Path
 from statistics import mean, stdev
 from typing import Any
 
-from src.evaluation.procedural_metrics import RESULT_ARTIFACT_JSON
+# JSON artifact basenames whose stems must never be treated as task_ids in JSONL rows.
+RESULT_ARTIFACT_JSON: frozenset[str] = frozenset(
+    {
+        "summary.json",
+        "run_summary.json",
+        "procedural_summary.json",
+        "coverage_summary.json",
+        "rubric_summary.json",
+        "metrics_summary.json",
+        "slice_breakdown.json",
+        "quality_judge_summary.json",
+    }
+)
 
-# Stems of evaluation JSON artifacts that must never be paired as tasks.
 ARTIFACT_TASK_IDS: frozenset[str] = frozenset(
     {name.removesuffix(".json") for name in RESULT_ARTIFACT_JSON}
 )
@@ -34,8 +46,22 @@ def load_by_task(path: Path) -> dict[str, dict[str, Any]]:
             task_id = str(row["task_id"])
             if task_id in ARTIFACT_TASK_IDS:
                 continue
-            by_id[task_id] = row
+            by_id[task_id] = _flatten_metrics_row(row)
     return by_id
+
+
+def _flatten_metrics_row(row: dict[str, Any]) -> dict[str, Any]:
+    """Keep task_id plus scalar metrics; unwrap ``axis: {score: n}`` from quality judge rows."""
+
+    out: dict[str, Any] = {"task_id": row["task_id"]}
+    for key, value in row.items():
+        if key == "task_id":
+            continue
+        if _is_number(value):
+            out[key] = float(value)
+        elif isinstance(value, dict) and _is_number(value.get("score")):
+            out[key] = float(value["score"])
+    return out
 
 
 def paired_stats(
@@ -97,7 +123,9 @@ def paired_stats(
             **wins,
         })
 
-    overall = next((row for row in metric_results if row["metric"] in {"overall_score", "procedural_rigor_score"}), None)
+    overall = next((row for row in metric_results if row["metric"] == "ai_score"), None)
+    if overall is None and metric_results:
+        overall = metric_results[0]
     return {
         "title": f"{candidate_label} vs {baseline_label} (paired)",
         "n_tasks": len(common_ids),

@@ -26,7 +26,7 @@ MetaBotik/
 ├── src/
 │   ├── domain/                 # pure types (NormalizedTask, AgentResult, GoldEntry, …)
 │   ├── prompting/              # PromptStrategy registry (pmr / baseline / minimal / two-stage)
-│   ├── evaluation/             # procedural_metrics, rubric_scorer, paired_stats, compare
+│   ├── evaluation/             # quality_judge, rubric_scorer, paired_stats, compare
 │   ├── application/            # RunUseCase, EvalUseCase, JudgeUseCase, PipelineUseCase
 │   ├── infrastructure/         # RunDirManager (results/<suite>/<mode>/<run_id>/), file repo
 │   ├── cli/                    # Typer commands (run, pipeline, eval, compare, paired-stats, quality-judge, status)
@@ -90,22 +90,23 @@ metabotik run --suite pmr-bench --mode baseline
 metabotik run --suite pmr-bench --mode baseline-minimal
 metabotik run --suite pmr-bench --mode baseline-two-stage
 
-# 2. Score the latest run (technical/form metric)
+# 2. Refresh run summary + by_task.jsonl (optional rubric_scores.csv if present)
 metabotik eval --suite pmr-bench --mode pmr --run-id latest
 
 # 3. Score semantic answer quality with an LLM judge
 metabotik quality-judge --suite pmr-bench --mode pmr --run-id latest
 
-# 4. Compare two runs
+# 4. Compare two runs (pipeline uses quality_judge_summary.json when present)
 metabotik compare \
-  --candidate results/pmr-bench/pmr/latest/summary.json \
-  --baseline  results/pmr-bench/baseline/latest/summary.json \
+  --candidate results/pmr-bench/pmr/latest/quality_judge_summary.json \
+  --baseline  results/pmr-bench/baseline/latest/quality_judge_summary.json \
   --output    results/pmr-bench/_comparison/compare.json
 
 # 5. Paired statistical test (Cohen's d + bootstrap 95% CI)
+# Prefer `quality_judge_by_task.jsonl` when comparing semantic axes; `by_task.jsonl` works for flat numeric rows.
 metabotik paired-stats \
-  --candidate results/pmr-bench/pmr/latest/by_task.jsonl \
-  --baseline  results/pmr-bench/baseline/latest/by_task.jsonl
+  --candidate results/pmr-bench/pmr/latest/quality_judge_by_task.jsonl \
+  --baseline  results/pmr-bench/baseline/latest/quality_judge_by_task.jsonl
 
 # Full cycle (run × modes × repeats → eval → LLM quality judge → compare → paired)
 metabotik pipeline --suite pmr-bench --modes pmr,baseline --repeat 3
@@ -140,11 +141,8 @@ or post-hoc procedural reflection.
 
 ## Metrics
 
-`metabotik eval` writes the technical/form metric:
-
-- `procedural_rigor_score`: deterministic 7-sub-metric composite from
-  `src/evaluation/procedural_metrics.py`; it checks whether the JSON exposes
-  substantive `procedural_analysis`, `solution_steps` and `reflection`.
+`metabotik eval` writes `summary.json` + `by_task.jsonl` (task bookkeeping and,
+if `rubric_scores.csv` is present, optional manual 5-axis rubric totals).
 
 `metabotik quality-judge` writes the main semantic quality evaluation:
 
@@ -158,9 +156,9 @@ or post-hoc procedural reflection.
 Quality judge artifacts live next to the run:
 `quality_judge_by_task.jsonl` and `quality_judge_summary.json`.
 `eval` artifacts remain `by_task.jsonl` and `summary.json`.
-For PMR vs Baseline comparison the pipeline emits Cohen's d (paired), a paired
-t-test p-value, and a bootstrap 95 % CI for the mean delta via
-`src/evaluation/paired_stats.py`.
+The pipeline compares `quality_judge_summary.json` when present and runs paired
+stats on `quality_judge_by_task.jsonl` (axis scores flattened from nested JSON)
+via `src/evaluation/paired_stats.py`.
 
 ---
 
@@ -190,12 +188,11 @@ The CLI picks up the new mode automatically — no other change needed.
 ## Status of the original Qwen3 experiment
 
 Historical notes from the predecessor pipeline (Zarn workflow automation, 3
-runs on Qwen3-235B-FP8, achieving `procedural_rigor 0.886 ± 0.012` for PMR vs
-`0.009 ± 0.005` for baseline) live in
+runs on Qwen3-235B-FP8) live in
 [`docs/research/EXPERIMENT_RESULTS.md`](docs/research/EXPERIMENT_RESULTS.md).
 
 The new PMR-Bench is broader (4 domains instead of 1, 5 Intermediate + 5
 Advanced instead of 10 Expert) and uses skeleton+claims gold instead of Zarn's
 artifact-coverage rubric, so absolute numbers are not directly comparable
-across the two suites. The metric machinery (`procedural_metrics`,
-`paired_stats`) is preserved verbatim.
+across the two suites. Paired statistics (`paired_stats`) remain available for
+any flat per-task JSONL (including quality-judge outputs).
