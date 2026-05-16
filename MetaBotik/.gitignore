@@ -1,0 +1,19 @@
+.venv/
+.idea/
+.env
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# All result trees. The canonical layout is results/<suite>/<mode>/<run_id>/.
+results/
+results_*/
+
+# Logs and PDFs are not tracked.
+logs/
+docs/papers/

@@ -1,0 +1,41 @@
+The previous model response did not satisfy the required JSON schema. Produce ONE corrected JSON object only.
+
+Required top-level keys (all mandatory):
+- task_id: MUST be exactly "{{expected_task_id}}" (string).
+- task_type: MUST be exactly "{{expected_task_type}}" (string, one of: linear, branching, cyclic, analytical, diagnostic, creative, mixed).
+- difficulty: MUST be exactly "{{expected_difficulty}}" (string, one of: basic, intermediate, advanced, expert).
+- procedural_analysis: object with keys problem_classification, selected_procedure, selection_reasoning, alternative_procedures.
+- solution_steps: array of 1 to 7 step objects (use the minimum number of atomic stages the task truly needs).
+- reflection: object with effectiveness, limitations, best_use_cases, future_modifications.
+- metadata: object with model, temperature, top_p, timestamp (use plausible values if unknown).
+
+procedural_analysis.alternative_procedures:
+- MUST be an array of at least 2 objects.
+- Each object MUST have exactly two string keys: "name" and "rejection_reason". Never use plain strings in this array.
+
+Each solution_steps[i] MUST be an object with:
+- "step": integer 1, 2, 3, ...
+- "title": non-empty string
+- "action": non-empty string
+- "procedure_logic": non-empty string; must explain why this step exists AND how the previous step's output (or the task statement for step 1) feeds this step
+- "critical_points": array of strings (may be empty [] but must be an array)
+- "adaptation_notes": array of strings (may be empty [] but must be an array)
+
+reflection:
+- limitations: array of at least 2 strings
+- best_use_cases, future_modifications: arrays of strings
+- critical_points / adaptation_notes must never be a single string
+
+Return JSON only. No markdown fences. No text before or after the JSON.
+
+Invalid response (may be empty):
+{{invalid_response}}
+
+Validation errors:
+{{validation_errors}}
+
+Context — use for content only; still echo task_id/task_type/difficulty exactly as given above:
+Title: {{title}}
+
+Task:
+{{task}}

@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+MetaBotik/.env
+MetaBotik/.venv/
+MetaBotik/results/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.cursor/
+.DS_Store
