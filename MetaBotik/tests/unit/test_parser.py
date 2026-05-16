@@ -136,6 +136,21 @@ def test_parser_accepts_single_solution_step() -> None:
     assert result.solution_steps[0].step == 1
 
 
+def test_parser_accepts_json_with_literal_newline_inside_string() -> None:
+    """Some models emit strict-invalid JSON (literal newline inside a quoted string)."""
+
+    payload = valid_agent_result_payload()
+    payload["procedural_analysis"]["selection_reasoning"] = "FIRST\nSECOND"
+    dumped = json.dumps(payload)
+    # Turn the properly escaped newline back into a literal newline inside the string.
+    broken = dumped.replace("FIRST\\nSECOND", "FIRST\nSECOND")
+    with pytest.raises(json.JSONDecodeError):
+        json.loads(broken, strict=True)
+
+    result = ResponseParser().parse(broken)
+    assert result.procedural_analysis.selection_reasoning == "FIRST\nSECOND"
+
+
 def test_parser_raises_repair_for_invalid_json() -> None:
     parser = ResponseParser()
     with pytest.raises(SchemaRepairNeeded):

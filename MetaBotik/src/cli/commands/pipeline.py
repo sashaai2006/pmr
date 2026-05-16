@@ -1,4 +1,4 @@
-"""`metabotik pipeline` — run × modes × repeats → eval per run → compare + paired."""
+"""`metabotik pipeline` — run × modes × repeats → eval → quality-judge → compare + paired."""
 
 from __future__ import annotations
 
@@ -31,6 +31,11 @@ def pipeline_cmd(
     repeat: int = typer.Option(1, "--repeat"),
     limit: int | None = typer.Option(None, "--limit"),
     skip_run: bool = typer.Option(False, "--skip-run", help="Eval-only, do not call LLM."),
+    skip_quality_judge: bool = typer.Option(
+        False,
+        "--skip-quality-judge",
+        help="Do not run LLM quality judge after each eval (saves tokens/time).",
+    ),
     dry_run: bool = typer.Option(False, "--dry-run"),
     log_file: Path | None = typer.Option(None, "--log-file"),
 ) -> None:
@@ -46,7 +51,8 @@ def pipeline_cmd(
             tasks = tasks[:limit]
         for rep in range(1, repeat + 1):
             for mode in mode_list:
-                typer.echo(f"DRY rep={rep} mode={mode.value} tasks={len(tasks)}")
+                q = "" if skip_quality_judge else " + quality_judge"
+                typer.echo(f"DRY rep={rep} mode={mode.value} tasks={len(tasks)}{q}")
         return
 
     settings = LLMSettings()  # type: ignore[call-arg]
@@ -63,10 +69,13 @@ def pipeline_cmd(
         repeat=repeat,
         limit=limit,
         skip_run=skip_run,
+        quality_judge=not skip_quality_judge,
     )
     typer.echo(f"runs: {len(outcome.runs)}")
     for run in outcome.runs:
         typer.echo(f"  {run.suite}/{run.mode.value}/{run.run_id}")
+    for q_path in outcome.quality_judge_summary_paths:
+        typer.echo(f"quality_judge: {q_path}")
     for cmp_path in outcome.comparison_paths:
         typer.echo(f"comparison: {cmp_path}")
     for paired_path in outcome.paired_stats_paths:

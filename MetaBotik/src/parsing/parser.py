@@ -24,7 +24,9 @@ class ResponseParser:
                 len(normalized),
             )
         try:
-            payload = json.loads(normalized)
+            # Models (e.g. DeepSeek) sometimes emit literal newlines/tabs inside JSON strings;
+            # strict=False accepts those while still rejecting true structural garbage.
+            payload = json.loads(normalized, strict=False)
         except json.JSONDecodeError as exc:
             message = f"JSON decode failed: {summarize_validation_error(exc)}"
             log.warning("%s raw_chars=%d normalized_chars=%d", message, len(raw_content), len(normalized))

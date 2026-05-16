@@ -107,8 +107,10 @@ metabotik paired-stats \
   --candidate results/pmr-bench/pmr/latest/by_task.jsonl \
   --baseline  results/pmr-bench/baseline/latest/by_task.jsonl
 
-# Full cycle (run × modes × repeats → eval → compare → paired)
+# Full cycle (run × modes × repeats → eval → LLM quality judge → compare → paired)
 metabotik pipeline --suite pmr-bench --modes pmr,baseline --repeat 3
+# Same without quality judge (saves tokens)
+metabotik pipeline --suite pmr-bench --modes pmr,baseline --skip-quality-judge
 
 # Inspect known suites and latest runs
 metabotik status

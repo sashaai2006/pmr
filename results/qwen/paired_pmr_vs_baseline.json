@@ -1,0 +1,47 @@
+{
+  "title": "pmr vs baseline (paired)",
+  "n_tasks": 10,
+  "alpha": 0.05,
+  "candidate_label": "pmr",
+  "baseline_label": "baseline",
+  "candidate_path": "results/pmr-bench/pmr/latest/by_task.jsonl",
+  "baseline_path": "results/pmr-bench/baseline/latest/by_task.jsonl",
+  "overall": {
+    "metric": "procedural_rigor_score",
+    "pmr_mean": 0.8825,
+    "baseline_mean": 0.0833,
+    "delta_mean": 0.7993,
+    "relative_change_percent": 960.06,
+    "paired_t_statistic": 38.3269,
+    "paired_p_value": 0.0,
+    "cohen_d_paired": 12.12,
+    "ci_95": [
+      0.7587,
+      0.8355
+    ],
+    "significant_at_alpha": true,
+    "wins_pmr": 10,
+    "wins_baseline": 0,
+    "ties": 0
+  },
+  "metrics": [
+    {
+      "metric": "procedural_rigor_score",
+      "pmr_mean": 0.8825,
+      "baseline_mean": 0.0833,
+      "delta_mean": 0.7993,
+      "relative_change_percent": 960.06,
+      "paired_t_statistic": 38.3269,
+      "paired_p_value": 0.0,
+      "cohen_d_paired": 12.12,
+      "ci_95": [
+        0.7587,
+        0.8355
+      ],
+      "significant_at_alpha": true,
+      "wins_pmr": 10,
+      "wins_baseline": 0,
+      "ties": 0
+    }
+  ]
+}

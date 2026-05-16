@@ -126,7 +126,7 @@ def _extract_json(raw: str) -> dict[str, Any]:
     end = text.rfind("}")
     if start >= 0 and end >= start:
         text = text[start : end + 1]
-    payload = json.loads(text)
+    payload = json.loads(text, strict=False)
     if not isinstance(payload, dict):
         raise ValueError("semantic judge response must be a JSON object")
     return payload

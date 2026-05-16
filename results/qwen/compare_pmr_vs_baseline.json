@@ -1,0 +1,25 @@
+{
+  "title": "pmr vs baseline",
+  "candidate_label": "pmr",
+  "baseline_label": "baseline",
+  "metrics": [
+    {
+      "metric": "procedural_rigor_mean",
+      "pmr_value": 0.8825,
+      "baseline_value": 0.0833,
+      "delta": 0.7992,
+      "relative_change_percent": 959.4238,
+      "winner": "pmr",
+      "change_label": "improved"
+    },
+    {
+      "metric": "procedural_rigor_std",
+      "pmr_value": 0.0349,
+      "baseline_value": 0.0608,
+      "delta": -0.0259,
+      "relative_change_percent": -42.5987,
+      "winner": "baseline",
+      "change_label": "regressed"
+    }
+  ]
+}

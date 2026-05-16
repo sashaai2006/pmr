@@ -175,7 +175,7 @@ class _SingleShotJsonStrategy:
         completion = llm.complete(messages, json_response=True)
         _save_raw(ctx, self.raw_stage, completion.content)
         try:
-            payload = json.loads(completion.content)
+            payload = json.loads(completion.content, strict=False)
         except json.JSONDecodeError as exc:
             raise ValueError(f"baseline response is not valid JSON: {exc}") from exc
         if not isinstance(payload, dict):
@@ -237,7 +237,7 @@ class BaselineTwoStageStrategy:
         _save_raw(ctx, "baseline-packager", pack_completion.content)
 
         try:
-            payload = json.loads(pack_completion.content)
+            payload = json.loads(pack_completion.content, strict=False)
         except json.JSONDecodeError as exc:
             raise ValueError(f"packager response is not valid JSON: {exc}") from exc
         if not isinstance(payload, dict):

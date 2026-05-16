@@ -1,0 +1,9 @@
+{
+  "n_tasks": 10,
+  "completeness_mean": 4.9,
+  "accuracy_mean": 5.5,
+  "latent_pattern_quality_mean": 3.3,
+  "practical_value_mean": 5.4,
+  "ai_score_mean": 4.885,
+  "pass_rate": 0.0
+}

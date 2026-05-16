@@ -1,0 +1,47 @@
+{
+  "title": "pmr vs baseline (paired)",
+  "n_tasks": 10,
+  "alpha": 0.05,
+  "candidate_label": "pmr",
+  "baseline_label": "baseline",
+  "candidate_path": "results/pmr-bench/pmr/20260516T130330Z-642f/by_task.jsonl",
+  "baseline_path": "results/pmr-bench/baseline/20260516T130612Z-9848/by_task.jsonl",
+  "overall": {
+    "metric": "procedural_rigor_score",
+    "pmr_mean": 0.6951,
+    "baseline_mean": 0.012,
+    "delta_mean": 0.6831,
+    "relative_change_percent": 5692.25,
+    "paired_t_statistic": 31.628,
+    "paired_p_value": 0.0,
+    "cohen_d_paired": 10.0017,
+    "ci_95": [
+      0.6429,
+      0.7232
+    ],
+    "significant_at_alpha": true,
+    "wins_pmr": 10,
+    "wins_baseline": 0,
+    "ties": 0
+  },
+  "metrics": [
+    {
+      "metric": "procedural_rigor_score",
+      "pmr_mean": 0.6951,
+      "baseline_mean": 0.012,
+      "delta_mean": 0.6831,
+      "relative_change_percent": 5692.25,
+      "paired_t_statistic": 31.628,
+      "paired_p_value": 0.0,
+      "cohen_d_paired": 10.0017,
+      "ci_95": [
+        0.6429,
+        0.7232
+      ],
+      "significant_at_alpha": true,
+      "wins_pmr": 10,
+      "wins_baseline": 0,
+      "ties": 0
+    }
+  ]
+}

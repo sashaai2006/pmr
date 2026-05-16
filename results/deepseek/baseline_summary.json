@@ -1,0 +1,8 @@
+{
+  "n_tasks": 10,
+  "suite": "pmr-bench",
+  "mode": "baseline",
+  "run_id": "20260516T143358Z-3fca",
+  "procedural_rigor_mean": 0.0757,
+  "procedural_rigor_std": 0.0759
+}

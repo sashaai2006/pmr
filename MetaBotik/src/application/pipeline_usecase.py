@@ -1,4 +1,4 @@
-"""End-to-end pipeline: run × modes × repeats → eval per run → paired stats."""
+"""End-to-end pipeline: run × modes × repeats → eval → LLM quality judge → compare + paired."""
 
 from __future__ import annotations
 
@@ -9,8 +9,12 @@ from pathlib import Path
 from src.application.eval_usecase import EvalUseCase
 from src.application.run_usecase import RunUseCase
 from src.domain.enums import PromptMode
-from src.evaluation.paired_stats import paired_stats, save_paired_stats
 from src.evaluation.compare import compare_summaries, load_summary, save_comparison
+from src.evaluation.paired_stats import paired_stats, save_paired_stats
+from src.evaluation.quality_judge import (
+    SUMMARY_FILENAME as QUALITY_JUDGE_SUMMARY_FILENAME,
+    QualityJudgeUseCase,
+)
 from src.infrastructure.run_dir import RunDirManager
 from src.llm.client import LLMClient
 from src.prompting.strategies import get_strategy
@@ -30,6 +34,7 @@ class RunRecord:
 @dataclass
 class PipelineOutcome:
     runs: list[RunRecord] = field(default_factory=list)
+    quality_judge_summary_paths: list[Path] = field(default_factory=list)
     comparison_paths: list[Path] = field(default_factory=list)
     paired_stats_paths: list[Path] = field(default_factory=list)
 
@@ -57,6 +62,7 @@ class PipelineUseCase:
         limit: int | None = None,
         skip_run: bool = False,
         compare_pairs: list[tuple[PromptMode, PromptMode]] | None = None,
+        quality_judge: bool = True,
     ) -> PipelineOutcome:
         suite = get_suite(suite_name)
         all_tasks = suite.load_tasks()
@@ -64,6 +70,8 @@ class PipelineUseCase:
             all_tasks = all_tasks[:limit]
         outcome = PipelineOutcome()
         runs_by_mode: dict[PromptMode, list[RunRecord]] = {m: [] for m in modes}
+        tasks_by_id = {task.task_id: task for task in all_tasks}
+        gold_v2_by_id = {entry.task_id: entry for entry in suite.load_gold_v2()}
 
         for rep in range(1, repeat + 1):
             log.info("=== repeat %d/%d ===", rep, repeat)
@@ -91,6 +99,19 @@ class PipelineUseCase:
                     mode=mode.value,
                     run_id=run_id,
                 ).run()
+                if quality_judge and any(run_dir.glob("PMR-*.json")):
+                    log.info("quality judge suite=%s mode=%s run_id=%s", suite_name, mode.value, run_id)
+                    QualityJudgeUseCase(
+                        run_dir=run_dir,
+                        tasks_by_id=tasks_by_id,
+                        gold_v2_by_id=gold_v2_by_id,
+                        llm=self._llm,
+                    ).execute(sleep_seconds=self._sleep)
+                    outcome.quality_judge_summary_paths.append(
+                        run_dir / QUALITY_JUDGE_SUMMARY_FILENAME,
+                    )
+                elif quality_judge:
+                    log.warning("quality judge skipped: no PMR-*.json answers in %s", run_dir)
 
         if compare_pairs is None:
             compare_pairs = [
