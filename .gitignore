@@ -18,6 +18,7 @@ __pycache__/
 # Logs
 *.log
 _patch_test.log
+_selftest_tmp/
 
 # LaTeX build artifacts (sources *.tex stay tracked)
 *.aux

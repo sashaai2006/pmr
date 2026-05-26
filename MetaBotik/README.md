@@ -2,6 +2,8 @@
 
 **Procedural Meta-Reflection (PMR) benchmark and agent pipeline** (after Dushkin, *Metacognitive Prompt Engineering* / Russian *Метакогнитивная промпт-инженерия*).
 
+This package lives inside the parent repo **`pmr/`** — see the [root README](../README.md) for the full tree (`docs/paper/`, `results/`, `tools/`).
+
 MetaBotik measures whether a language model not only solves a procedural task,
 but also makes its problem-solving method conscious, justified and reproducible
 — the core claim of procedural meta-reflection in that monograph.
@@ -18,11 +20,12 @@ evaluator can score procedural transparency separately from answer correctness.
 ```
 MetaBotik/
 ├── suites/
-│   └── pmr_bench/
+│   └── pmr_bench/              # canonical dataset (single source of truth)
 │       ├── benchmark.jsonl     # 10 tasks (agent-visible)
-│       ├── gold.jsonl          # reference answers + expected claims
-│       ├── rubric.json         # shared 5-axis (0-2) rubric, total_max=10
-│       └── tools/build_gold.py # how the gold file was produced
+│       ├── gold.jsonl          # v1 reference + expected claims
+│       ├── gold_v2.jsonl       # flexible invariants (LLM quality judge)
+│       ├── rubric.json         # shared 5-axis (0-2) rubric for manual scoring
+│       └── tools/build_gold.py # regenerate gold.jsonl from Python CASES
 ├── src/
 │   ├── domain/                 # pure types (NormalizedTask, AgentResult, GoldEntry, …)
 │   ├── prompting/              # PromptStrategy registry (pmr / baseline / minimal / two-stage)
@@ -48,8 +51,8 @@ MetaBotik/
 └── tests/                      # 52 unit/smoke tests
 ```
 
-Every run writes to `results/<suite>/<mode>/<run_id>/` and updates the
-`results/<suite>/<mode>/latest` symlink to point at the freshest run.
+Every run writes to `MetaBotik/results/<suite>/<mode>/<run_id>/` and updates the
+`latest` symlink. Published paper aggregates are copied to repo-root `results/`.
 
 ---
 

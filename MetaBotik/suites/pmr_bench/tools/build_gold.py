@@ -1,7 +1,6 @@
-"""Build pmr_gold.jsonl from authored Python structures.
+"""Build PMR-Bench gold.jsonl and rubric.json from authored Python structures.
 
-This script is a one-shot generator; it is not part of the runtime benchmark.
-After running once, the produced pmr_gold.jsonl is the canonical artefact.
+One-shot generator (not used at runtime). Output: suites/pmr_bench/gold.jsonl.
 """
 import json
 from pathlib import Path
@@ -755,7 +754,7 @@ CASES = [
 
 def main() -> None:
     suite_root = Path(__file__).resolve().parent.parent
-    gold_path = suite_root / "gold.jsonl"
+    gold_path = suite_root / "gold.jsonl"  # canonical judge reference (v1 claims)
     rubric_path = suite_root / "rubric.json"
 
     with gold_path.open("w", encoding="utf-8") as f:

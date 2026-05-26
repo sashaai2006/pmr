@@ -13,6 +13,7 @@ mpl.rcParams["font.family"] = "DejaVu Sans"
 mpl.rcParams["axes.unicode_minus"] = False
 
 ROOT = Path(__file__).resolve().parents[1]
+PAPER_FIGURES = ROOT / "docs" / "paper" / "figures"
 
 
 def load_metric(path: Path, metric: str) -> list[float]:
@@ -82,9 +83,8 @@ def main() -> None:
         y=1.02,
     )
     fig.tight_layout()
-    out_dir = ROOT / "figures"
-    out_dir.mkdir(exist_ok=True)
-    out_png = out_dir / "pmr_I_LPQ_boxplots.png"
+    PAPER_FIGURES.mkdir(parents=True, exist_ok=True)
+    out_png = PAPER_FIGURES / "pmr_I_LPQ_boxplots.png"
     fig.savefig(out_png, bbox_inches="tight")
     print("Wrote", out_png)
 
