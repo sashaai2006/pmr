@@ -204,7 +204,7 @@ class GoldMetadata(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     target_skill: str
-    source_section: str = "4.3 Procedural Meta-Reflection"
+    source_section: str = "Душкин Р. В. Метакогнитивная промпт-инженерия (процедурная мета-рефлексия)"
     discriminator_note: str | None = None
 
 

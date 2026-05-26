@@ -21,7 +21,7 @@ from src.cli.commands import (
 load_dotenv()
 
 app = typer.Typer(
-    help="MetaBotik — Procedural Meta-Reflection (PMR / MKPI 4.3) agent pipeline.",
+    help="MetaBotik — Procedural Meta-Reflection (PMR; Dushkin, Metacognitive Prompt Engineering) agent pipeline.",
     no_args_is_help=True,
 )
 

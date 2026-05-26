@@ -1,7 +1,7 @@
 # Результаты эксперимента: PMR vs Structured Baseline
 
 **Дата:** 15 мая 2026  
-**Проект:** MetaBotik — Procedural Meta-Reflection (МКПИ 4.3)  
+**Проект:** MetaBotik — Procedural Meta-Reflection (Душкин Р. В., *Метакогнитивная промпт-инженерия*)  
 **Статус:** финальные агрегаты после 3 прогонов (run_02 и run_03 — полный перезапуск LLM)
 
 ---

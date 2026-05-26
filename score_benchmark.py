@@ -1,35 +1,3 @@
-"""score_benchmark.py — Scoring engine for the PMR benchmark.
-
-Computes per-case, per-model and A/B (PMR vs baseline) metrics from a judge's
-filled-in answers files against the gold reference.
-
-Inputs (JSONL files):
-  - benchmark file (agent-visible): id, domain, difficulty, task_description
-  - gold file (judge-only): expected_meta_elements, evaluation_rubric, metadata
-  - answers file(s): id, rubric_scores (5 axes, each 0-2), claims_hit
-                    (binary lists matching gold expected_meta_elements lengths)
-
-Outputs:
-  - report.json: machine-readable, full structured data
-  - report.md:   human-readable summary with tables
-
-Usage:
-  python3 score_benchmark.py \\
-      --benchmark pmr_benchmark.jsonl \\
-      --gold pmr_gold.jsonl \\
-      --answers answers_pmr.jsonl \\
-      [--baseline answers_baseline.jsonl] \\
-      [--judge-mode manual|llm|hybrid] \\
-      [--out report.json --report-md report.md] \\
-      [--bootstrap-iters 1000]
-
-Utility modes:
-  --init-template <path>  emit an empty answers template from the gold file
-  --self-test             run end-to-end on synthetic data (no I/O of real answers)
-
-Dependencies: stdlib only. scipy is optional — used for an exact Wilcoxon
-signed-rank p-value; if absent, falls back to a normal approximation.
-"""
 from __future__ import annotations
 
 import argparse

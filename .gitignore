@@ -13,3 +13,25 @@ __pycache__/
 .mypy_cache/
 .cursor/
 .DS_Store
+.idea/
+
+# Logs
+*.log
+_patch_test.log
+
+# LaTeX build artifacts (sources *.tex stay tracked)
+*.aux
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.bcf
+*.run.xml
+*.bbl
+*.blg

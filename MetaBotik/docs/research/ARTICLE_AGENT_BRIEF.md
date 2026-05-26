@@ -7,7 +7,7 @@ This brief contains the minimum complete context needed to write a paper/article
 ## 1. Project Identity
 
 **Project name:** MetaBotik  
-**Core method:** Procedural Meta-Reflection (PMR), also referred to in the project rules as МКПИ 4.3.  
+**Core method:** Procedural Meta-Reflection (PMR), as formalized in Dushkin's *Metacognitive Prompt Engineering* (Russian: *Метакогнитивная промпт-инженерия*).  
 **Goal:** Build and evaluate a Python LLM-agent pipeline that solves workflow automation tasks while explicitly exposing the procedure used to solve them.
 
 The PMR agent is not just expected to output a correct workflow answer. It must also:

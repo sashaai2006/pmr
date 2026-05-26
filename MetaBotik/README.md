@@ -1,10 +1,10 @@
 # MetaBotik
 
-**Procedural Meta-Reflection (PMR / MKPI 4.3) benchmark and agent pipeline.**
+**Procedural Meta-Reflection (PMR) benchmark and agent pipeline** (after Dushkin, *Metacognitive Prompt Engineering* / Russian *Метакогнитивная промпт-инженерия*).
 
 MetaBotik measures whether a language model not only solves a procedural task,
 but also makes its problem-solving method conscious, justified and reproducible
-— the core claim of the *MKPI 4.3 — Procedural Meta-Reflection* technique.
+— the core claim of procedural meta-reflection in that monograph.
 
 The default suite is **PMR-Bench**: 10 hand-crafted tasks (5 Intermediate + 5
 Advanced) across four domains — Engineering, Education, Management, Therapy.
@@ -128,7 +128,7 @@ The experiment uses one PMR condition and three non-PMR baselines:
 
 | Mode | Prompt strength | Purpose |
 |---|---|---|
-| `pmr` | Full MKPI 4.3 protocol, Russian PMR-Bench-oriented prompt, `AgentResult` schema | Upper bound for procedural transparency: explicit procedure choice, rejected alternatives, critical points, adaptation notes, reflection. |
+| `pmr` | Full PMR protocol (Dushkin, *Metacognitive Prompt Engineering*), Russian PMR-Bench-oriented prompt, `AgentResult` schema | Upper bound for procedural transparency: explicit procedure choice, rejected alternatives, critical points, adaptation notes, reflection. |
 | `baseline-minimal` | Minimal instruction, `{task_id, answer}` JSON only | No-structure floor: tests how much PMR-Bench gold signal appears without prompt scaffolding. |
 | `baseline` | Medium-strength domain-expert prompt with neutral JSON (`summary`, `plan`, `key_decisions`, `risks`, `rationale`) | Main fair baseline: competent expert answer without meta-reflection scaffolding. |
 | `baseline-two-stage` | Medium-strength free-text solve, then neutral JSON packaging | Controls for whether JSON formatting itself explains the metric delta. |

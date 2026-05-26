@@ -1,6 +1,6 @@
-# Отчёт по эксперименту Qwen на PMR-Bench
+# Отчёт по эксперименту Qwen3 235B A22B Instruct 2507 FP8 на PMR-Bench
 ## Постановка эксперимента
-- **Модель:** `qwen3-235b-a22b-fp8/latest`
+- **Модель:** Qwen3 235B A22B Instruct 2507 FP8 (конечная точка в конвейере: `qwen3-235b-a22b-fp8/latest`)
 - **Бенчмарк:** PMR-Bench, 10 задач
 - **Условия сравнения:** PMR prompt против структурированного non-PMR baseline
 - **Оценивание:** LLM quality judge (`completeness`, `accuracy`, `latent_pattern_quality`, `practical_value`, вычисляемый `ai_score`)

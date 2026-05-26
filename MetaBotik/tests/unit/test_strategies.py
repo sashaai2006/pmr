@@ -40,7 +40,7 @@ def test_pmr_strategy_builds_two_messages() -> None:
     assert len(messages) == 2
     assert messages[0].role == "system"
     assert messages[1].role == "user"
-    assert "MKPI 4.3" in messages[0].content
+    assert "Metacognitive Prompt Engineering" in messages[0].content
     assert f"- task_id: {task.task_id}" in messages[1].content
 
 

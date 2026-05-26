@@ -1,9 +1,9 @@
-# Отчёт по эксперименту YandexGPT на PMR-Bench
+# Отчёт по эксперименту YandexGPT 5.1 Pro на PMR-Bench
 
 ## Постановка эксперимента
 
-- **Answer model:** `yandexgpt/latest`
-- **Judge model:** `qwen3-235b-a22b-fp8/latest`
+- **Модель ответа:** YandexGPT 5.1 Pro (конечная точка: `yandexgpt/latest`)
+- **Модель-судья:** Qwen3 235B A22B Instruct 2507 FP8 (конечная точка: `qwen3-235b-a22b-fp8/latest`)
 - **Бенчмарк:** PMR-Bench, 10 задач
 - **Условия сравнения:** PMR prompt против структурированного non-PMR baseline
 - **PMR run_id:** `20260516T130330Z-642f`
@@ -38,7 +38,7 @@
 
 ## Интерпретация
 
-PMR сравнивается с той же моделью в режиме структурированного non-PMR baseline. Оценка — LLM quality judge по осям и `AI Score` по формуле в `src/evaluation/quality_judge.py`.
+PMR сравнивается с той же моделью **YandexGPT 5.1 Pro** в режиме структурированного non-PMR baseline. Оценка — LLM quality judge (**Qwen3 235B A22B Instruct 2507 FP8**) по осям и `AI Score` по формуле в `src/evaluation/quality_judge.py`.
 
 ## Включённые артефакты
 
